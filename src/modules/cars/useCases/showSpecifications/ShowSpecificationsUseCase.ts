@@ -1,5 +1,5 @@
 import { Specification } from "../../entities/Specification";
-import { ISpecificationsRepositoriy } from "../../repositories/ISpecificationsRepositoriy";
+import { ISpecificationsRepository } from "../../repositories/ISpecificationsRepository";
 
 interface IRequest {
     name: string;
@@ -7,7 +7,7 @@ interface IRequest {
 }
 
 class ShowSpecificationsUseCase {
-    constructor(private specificationsRepository: ISpecificationsRepositoriy) { }
+    constructor(private specificationsRepository: ISpecificationsRepository) { }
 
     execute(): Specification[] {
         const specifications = this.specificationsRepository.show();

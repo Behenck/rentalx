@@ -1,5 +1,5 @@
 import { Category } from "../../entities/Category";
-import { ICategoriesRepositoriy } from "../../repositories/ICategoriesRepositoriy";
+import { ICategoriesRepository } from "../../repositories/ICategoriesRepository";
 
 interface IRequest {
     name: string;
@@ -7,9 +7,9 @@ interface IRequest {
 }
 
 class ShowCategoriesUseCase {
-    constructor(private categoriesRepository: ICategoriesRepositoriy) { }
+    constructor(private categoriesRepository: ICategoriesRepository) { }
 
-    execute(): Category[] {
+    execute(): Promise<Category[]> {
         const categories = this.categoriesRepository.show();
 
         return categories;
