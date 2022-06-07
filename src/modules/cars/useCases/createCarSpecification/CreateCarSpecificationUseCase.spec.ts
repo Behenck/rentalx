@@ -1,14 +1,19 @@
 import { AppError } from './../../../../shared/errors/AppError';
 import { CarsRepositoryInMemory } from '@modules/cars/repositories/in-memory/CarsRepositoryInMomory';
 import { CreateCarSpecificationUseCase } from "./CreateCarSpecificationuseCase"
+import { SpecificationsRepositoryInMemory } from '@modules/cars/repositories/in-memory/SpecificationsRepositoryInMemory';
 
 let createCarSpecificationUseCase: CreateCarSpecificationUseCase;
 let carsRepositoryInMemory: CarsRepositoryInMemory;
+let specificationsRepositoryInMemory: SpecificationsRepositoryInMemory;
 
 describe("Create Car Specification", () => {
     beforeEach(() => {
         carsRepositoryInMemory = new CarsRepositoryInMemory();
-        createCarSpecificationUseCase = new CreateCarSpecificationUseCase(carsRepositoryInMemory);
+        specificationsRepositoryInMemory = new SpecificationsRepositoryInMemory();
+        createCarSpecificationUseCase = new CreateCarSpecificationUseCase(
+            carsRepositoryInMemory, specificationsRepositoryInMemory
+        );
     });
 
     it("should not be able to add a new specifcation to a now-existent car", async () => {
@@ -16,7 +21,7 @@ describe("Create Car Specification", () => {
             const car_id = "1234";
             const specification_id = ["54321"];
 
-            await createCarSpecificationUseCase.execute({car_id, specification_id});
+            await createCarSpecificationUseCase.execute({ car_id, specification_id });
         }).rejects.toBeInstanceOf(AppError);
     });
 
@@ -31,8 +36,16 @@ describe("Create Car Specification", () => {
             category_id: "category",
         });
 
-        const specification_id = ["54321"];
+        const specification = await specificationsRepositoryInMemory.create({
+            description: "test",
+            name: "test"
+        })
 
-        await createCarSpecificationUseCase.execute({car_id: car.id, specification_id});
-    })
+        const specification_id = [specification.id];
+
+        const specificationsCars = await createCarSpecificationUseCase.execute({ car_id: car.id, specification_id });
+
+        expect(specificationsCars).toHaveProperty("specifications");
+        expect(specificationsCars.specifications.length).toBe(1);
+    });
 })
