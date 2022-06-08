@@ -1,3 +1,6 @@
+import dayjs from "dayjs";
+
+import { Rental } from "@modules/rentals/infra/typeorm/entities/Rental";
 import { IRentalsRepository } from "@modules/rentals/repositories/IRentalsRepository";
 import { AppError } from "@shared/errors/AppError";
 
@@ -12,7 +15,7 @@ class CreateRentalUseCase {
         private rentalsRepository: IRentalsRepository
     ) {}
 
-    async execute({ user_id, car_id, expected_return_date }): Promise<void> {
+    async execute({ user_id, car_id, expected_return_date }): Promise<Rental> {
         const carUnavailable = await this.rentalsRepository.findOpenRentalByCar(car_id);
 
         if (carUnavailable) {
@@ -24,6 +27,18 @@ class CreateRentalUseCase {
         if (rentalOpenToUser) {
             throw new AppError("There's a rental in progress for user!");
         }
+
+        const compare = dayjs(expected_return_date).diff(dayjs(), "hours");
+
+        console.log(compare)
+
+        const rental = await this.rentalsRepository.create({
+            user_id,
+            car_id,
+            expected_return_date
+        });
+
+        return rental;
     }
 }
 
