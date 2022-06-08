@@ -33,7 +33,6 @@ O usuário responsável pelo cadastro deve ser um usuário administrador.
 
 **Requisito Funcional (RF)**
 Deve ser possível cadastrar a imagem do carro.
-Deve ser possível listar todos os carros.
 
 **Requisito Não Funcional (RNF)**
 Utilizar o multer para o upload dos arquivos.

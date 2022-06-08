@@ -24,11 +24,11 @@ class CreateCarSpecificationUseCase {
         if (!carExists) {
             throw new AppError("Car does not exists!");
         }
-
+        
         const specifications = await this.specificationsRepository.findByIds(
             specification_id
         );
-
+        
         carExists.specifications = specifications;
 
         await this.carsRepository.create(carExists);
