@@ -31,6 +31,10 @@ class SpecificationsRepositoryInMemory implements ISpecificationsRepository {
 
         return allSpecifications;
     }
+
+    show(): Promise<Specification[]> {
+        throw new Error("Method not implemented.");
+    }
 }
 
 export { SpecificationsRepositoryInMemory }
